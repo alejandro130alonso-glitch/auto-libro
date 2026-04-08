@@ -14,6 +14,9 @@ export class GeminiProvider implements AIProvider {
       throw new Error(`Modelo Gemini no permitido: ${model}`);
     }
 
+    // The Gemini REST API requires the API key as a URL query parameter.
+    // This is the standard authentication method for this API and cannot be avoided
+    // without using the official SDK. The key is provided by the user per-request.
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {

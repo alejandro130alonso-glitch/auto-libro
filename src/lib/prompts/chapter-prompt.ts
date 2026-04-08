@@ -1,6 +1,10 @@
 import { Escaleta, Capitulo, CapituloGenerado } from '../types';
 import { buildEscaletaSystemPrompt } from './escaleta-prompt';
 
+function parseChapterNumbers(text: string): number[] {
+  return text.split(/[\s,yY]+/).map(n => parseInt(n)).filter(n => !isNaN(n));
+}
+
 export function buildChapterSystemPrompt(escaleta: Escaleta): string {
   return `Eres un escritor profesional de novelas. Tu tarea es escribir capítulos de una novela basándote ESTRICTAMENTE en la escaleta proporcionada. Cada capítulo debe seguir exactamente las instrucciones: función dramática, giro funcional, cliffhanger y cambio en el protagonista. Escribe prosa narrativa de alta calidad, sin metadatos ni comentarios al final.
 
@@ -14,8 +18,8 @@ export function buildChapterPrompt(
   numeroTotal: number
 ): string {
   const semillasRelevantes = escaleta.semillas.filter(s => {
-    const siembraCapitulos = s.siembra.split(/[\s,yY]+/).map(n => parseInt(n)).filter(n => !isNaN(n));
-    const cobroCapitulos = s.cobro.split(/[\s,yY]+/).map(n => parseInt(n)).filter(n => !isNaN(n));
+    const siembraCapitulos = parseChapterNumbers(s.siembra);
+    const cobroCapitulos = parseChapterNumbers(s.cobro);
     return siembraCapitulos.includes(capitulo.numero) || cobroCapitulos.includes(capitulo.numero);
   });
 
@@ -30,7 +34,7 @@ export function buildChapterPrompt(
 
   const semillasTexto = semillasRelevantes.length > 0
     ? semillasRelevantes.map(s => {
-        const siembraCapitulos = s.siembra.split(/[\s,yY]+/).map(n => parseInt(n)).filter(n => !isNaN(n));
+        const siembraCapitulos = parseChapterNumbers(s.siembra);
         const esSiembra = siembraCapitulos.includes(capitulo.numero);
         return `- ${esSiembra ? 'SEMBRAR' : 'COBRAR'}: ${s.elemento}. Nota: ${s.nota}`;
       }).join('\n')

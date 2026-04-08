@@ -3,6 +3,8 @@ import { getProvider } from '@/lib/ai-providers';
 import { buildChapterSystemPrompt, buildChapterPrompt } from '@/lib/prompts/chapter-prompt';
 import { Escaleta, Capitulo, CapituloGenerado } from '@/lib/types';
 
+const MAX_CONTENT_LENGTH_FOR_SUMMARY = 2000;
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -26,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     const contenido = await aiProvider.generateText(userPrompt, systemPrompt, model, apiKey);
 
-    const resumenPrompt = `Resume en 2-3 frases el siguiente capítulo para usarlo como contexto en capítulos posteriores:\n\n${contenido.substring(0, 2000)}`;
+    const resumenPrompt = `Resume en 2-3 frases el siguiente capítulo para usarlo como contexto en capítulos posteriores:\n\n${contenido.substring(0, MAX_CONTENT_LENGTH_FOR_SUMMARY)}`;
     const resumen = await aiProvider.generateText(
       resumenPrompt,
       'Eres un asistente que genera resúmenes concisos de capítulos de novelas.',
