@@ -1,7 +1,19 @@
 import { AIProvider } from './openai';
 
+const ALLOWED_GEMINI_MODELS = new Set([
+  'gemini-1.5-pro',
+  'gemini-1.5-flash',
+  'gemini-pro',
+  'gemini-2.0-flash',
+  'gemini-2.5-pro',
+]);
+
 export class GeminiProvider implements AIProvider {
   async generateText(prompt: string, systemContext: string, model: string, apiKey: string): Promise<string> {
+    if (!ALLOWED_GEMINI_MODELS.has(model)) {
+      throw new Error(`Modelo Gemini no permitido: ${model}`);
+    }
+
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {

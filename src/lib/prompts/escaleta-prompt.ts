@@ -19,10 +19,7 @@ export function buildEscaletaSystemPrompt(escaleta: Escaleta): string {
     `- Después del cap. ${m.despuesDeCapitulo}: ${m.respuestaObligatoria}`
   ).join('\n');
 
-  // Use capitulos to avoid unused variable warning
-  const capitulosCount = capitulos.length;
-
-  return `ESCALETA COMPLETA DE LA NOVELA (${capitulosCount} capítulos)
+  return `ESCALETA COMPLETA DE LA NOVELA (${capitulos.length} capítulos)
 ================================
 
 ADN DEL LIBRO:

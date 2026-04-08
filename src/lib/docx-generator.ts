@@ -2,12 +2,10 @@ import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Page
 import { Escaleta, CapituloGenerado } from './types';
 
 export async function generateBookDocx(
-  escaleta: Escaleta,
+  _escaleta: Escaleta,
   capitulos: CapituloGenerado[],
   titulo: string = 'Mi Libro'
 ): Promise<Blob> {
-  // escaleta reserved for future metadata use
-  void escaleta;
   const children: Paragraph[] = [];
 
   // Título
