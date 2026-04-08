@@ -1,10 +1,18 @@
+const ALLOWED_GEMINI_MODELS = new Set([
+  'gemini-1.5-pro',
+  'gemini-1.5-flash',
+  'gemini-pro',
+  'gemini-2.0-flash-exp',
+  'gemini-2.0-flash',
+]);
+
 export async function geminiGenerateChapter(
   systemPrompt: string,
   userPrompt: string,
   model: string,
   apiKey: string
 ): Promise<string> {
-  const modelName = model.startsWith('gemini') ? model : 'gemini-1.5-pro';
+  const modelName = ALLOWED_GEMINI_MODELS.has(model) ? model : 'gemini-1.5-pro';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
